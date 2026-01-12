@@ -23,14 +23,14 @@ def data_cleaning(df, column):
     cur_size = len(df)
 
     # Standard Case, Punctuation, and Extra Spaces Removal so we avoid treating words that are the same with just some punctuation different
-    df[column] = df[column].str.replace(r'[^\w\s]', '', regex=True) # Remove punctuation
-    df[column] = df[column].str.replace(r'\s+', ' ', regex=True).str.strip() # Fix whitespace
+    # df[column] = df[column].str.replace(r'[^\w\s]', '', regex=True) # Remove punctuation
     df[column] = df[column].str.lower()
 
     # XXXX Redacted Placeholder handling, two or more x letters in English is very unlikely so I chose two Xs to replace
     # There are exceptions like Exxon or XXL but they're not necessarily words and they also aren't in the dataset
     num_placeholders = df[column].str.count(r'x{2,}').sum()
     df[column] = df[column].apply(lambda x: re.sub(r'x{2,}', '', x))
+    df[column] = df[column].str.replace(r'\s+', ' ', regex=True).str.strip() # Fix whitespace
     print(" -- XX Redacted Placeholder Removal --")
     print(f"Detected and substituted {num_placeholders} instances of redacted 'XXXX' placeholders.")
 
